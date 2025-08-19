@@ -57,10 +57,30 @@ window.addEventListener('DOMContentLoaded', function() {
 				if (centavos && parseInt(centavos) > 0) precoTexto = `${reais} reais e ${centavos} centavos`;
 				falar(`${nome}, preço ${precoTexto}`);
 			});
+			// Suporte para toque em dispositivos móveis
+			card.addEventListener('touchend', function() {
+				const nome = card.querySelector('.item-name').textContent;
+				let preco = card.querySelector('.item-price').textContent.replace('R$', '').trim();
+				preco = preco.replace(',', '.');
+				const [reais, centavos] = preco.split('.');
+				let precoTexto = `${reais} reais`;
+				if (centavos && parseInt(centavos) > 0) precoTexto = `${reais} reais e ${centavos} centavos`;
+				falar(`${nome}, preço ${precoTexto}`);
+			});
 			// Botão adicionar: fala ação, nome e preço
 			const btn = card.querySelector('.btn');
 			if (btn) {
 				btn.addEventListener('mouseenter', function() {
+					const nome = card.querySelector('.item-name').textContent;
+					let preco = card.querySelector('.item-price').textContent.replace('R$', '').trim();
+					preco = preco.replace(',', '.');
+					const [reais, centavos] = preco.split('.');
+					let precoTexto = `${reais} reais`;
+					if (centavos && parseInt(centavos) > 0) precoTexto = `${reais} reais e ${centavos} centavos`;
+					falar(`Adicionar ao pedido: ${nome}, preço ${precoTexto}`);
+				});
+				// Suporte para toque em dispositivos móveis
+				btn.addEventListener('touchend', function() {
 					const nome = card.querySelector('.item-name').textContent;
 					let preco = card.querySelector('.item-price').textContent.replace('R$', '').trim();
 					preco = preco.replace(',', '.');
@@ -91,12 +111,34 @@ window.addEventListener('DOMContentLoaded', function() {
 				el.addEventListener('mouseenter', function() {
 					falar(c.texto);
 				});
+				// Suporte para toque em dispositivos móveis
+				el.addEventListener('touchend', function() {
+					falar(c.texto);
+				});
 			}
 		});
 
 	// Fala ao passar mouse em todos os botões da página (inclusive navbar, footer, etc)
 		document.querySelectorAll('button, .nav-link').forEach(botao => {
 			botao.addEventListener('mouseenter', function() {
+				let texto = '';
+				if (botao.id === 'contrasteBtn') {
+					texto = botao.textContent.includes('Desativar') ? 'Desativar alto contraste' : 'Ativar alto contraste';
+				} else if (botao.classList.contains('btn-info')) {
+					texto = 'Clique para ouvir os itens do seu pedido e o total.';
+				} else if (botao.classList.contains('btn-danger')) {
+					texto = 'Limpar pedido';
+				} else if (botao.classList.contains('nav-link')) {
+					texto = `Ir para ${botao.textContent}`;
+				} else if (botao.classList.contains('btn')) {
+					texto = botao.textContent;
+				} else {
+					texto = botao.textContent;
+				}
+				if (texto) falar(texto);
+			});
+			// Suporte para toque em dispositivos móveis
+			botao.addEventListener('touchend', function() {
 				let texto = '';
 				if (botao.id === 'contrasteBtn') {
 					texto = botao.textContent.includes('Desativar') ? 'Desativar alto contraste' : 'Ativar alto contraste';
@@ -124,6 +166,10 @@ window.addEventListener('DOMContentLoaded', function() {
 			lerBtn.style.marginLeft = '12px';
 			lerBtn.onclick = lerPedido;
 			lerBtn.addEventListener('mouseenter', function() {
+				falar('Clique para ouvir os itens do seu pedido e o total.');
+			});
+			// Suporte para toque em dispositivos móveis
+			lerBtn.addEventListener('touchend', function() {
 				falar('Clique para ouvir os itens do seu pedido e o total.');
 			});
 			pedidoDiv.appendChild(lerBtn);
