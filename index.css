@@ -244,6 +244,7 @@ footer {
     box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
     border: 2px solid #f8b500 !important;
   }
+  }
   .btn, .btn.contraste {
     padding: 16px 24px !important;
     font-size: 1.2em !important;
