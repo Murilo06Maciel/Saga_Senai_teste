@@ -28,6 +28,15 @@ window.addEventListener('DOMContentLoaded', function() {
 				el.classList.remove('contraste');
 			}
 		});
+		// Atualiza botão de compra se existir
+		const comprarBtn = document.querySelector('#pedido .btn-success');
+		if (comprarBtn) {
+			if (isContraste) {
+				comprarBtn.classList.add('contraste');
+			} else {
+				comprarBtn.classList.remove('contraste');
+			}
+		}
 		btn.textContent = isContraste ? 'Desativar Alto Contraste' : 'Ativar Alto Contraste';
 	});
 });
@@ -186,6 +195,10 @@ window.addEventListener('DOMContentLoaded', function() {
 			comprarBtn.addEventListener('touchend', function() {
 				falar('Clique para finalizar sua compra.');
 			});
+			// Adiciona classe contraste se o modo estiver ativo
+			if(document.body.classList.contains('contraste')) {
+				comprarBtn.classList.add('contraste');
+			}
 			pedidoDiv.appendChild(comprarBtn);
 		}
 });
@@ -266,9 +279,11 @@ function finalizarCompra() {
 	});
 	const total = document.getElementById('total').textContent;
 	// Aqui você pode integrar com backend, WhatsApp, etc. Exemplo: abrir WhatsApp com pedido
-	const mensagem = encodeURIComponent('Meu pedido:\n' + pedido + '\n' + total);
-	window.open('https://wa.me/?text=' + mensagem, '_blank');
-	falar('Seu pedido foi enviado para compra.');
+	const emailDestino = 'testesaga000@gmail.com'; // Altere para o e-mail desejado
+	const assunto = encodeURIComponent('Pedido realizado pelo site');
+	const corpo = encodeURIComponent('Meu pedido:\n' + pedido + '\n' + total);
+	window.location.href = `mailto:${emailDestino}?subject=${assunto}&body=${corpo}`;
+	falar('Seu pedido foi enviado para o e-mail.');
 }
 // Exemplo de JS para futura interação
 // Adicione funcionalidades JS conforme necessário
