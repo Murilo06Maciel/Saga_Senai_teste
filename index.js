@@ -173,6 +173,20 @@ window.addEventListener('DOMContentLoaded', function() {
 				falar('Clique para ouvir os itens do seu pedido e o total.');
 			});
 			pedidoDiv.appendChild(lerBtn);
+			
+			// Botão de compra
+			const comprarBtn = document.createElement('button');
+			comprarBtn.textContent = 'Finalizar Compra';
+			comprarBtn.className = 'btn btn-success ms-2';
+			comprarBtn.style.marginLeft = '12px';
+			comprarBtn.onclick = finalizarCompra;
+			comprarBtn.addEventListener('mouseenter', function() {
+				falar('Clique para finalizar sua compra.');
+			});
+			comprarBtn.addEventListener('touchend', function() {
+				falar('Clique para finalizar sua compra.');
+			});
+			pedidoDiv.appendChild(comprarBtn);
 		}
 });
 
@@ -236,6 +250,25 @@ function lerPedido() {
 		texto += `Total ${totalTexto}.`;
 	}
 	falar(texto);
+}
+
+// Função para finalizar compra
+function finalizarCompra() {
+	const lista = document.getElementById('lista-pedido');
+	const itens = Array.from(lista.children);
+	if (itens.length === 0) {
+		falar('Adicione itens ao pedido antes de finalizar a compra.');
+		return;
+	}
+	let pedido = '';
+	itens.forEach(li => {
+		pedido += li.textContent + '\n';
+	});
+	const total = document.getElementById('total').textContent;
+	// Aqui você pode integrar com backend, WhatsApp, etc. Exemplo: abrir WhatsApp com pedido
+	const mensagem = encodeURIComponent('Meu pedido:\n' + pedido + '\n' + total);
+	window.open('https://wa.me/?text=' + mensagem, '_blank');
+	falar('Seu pedido foi enviado para compra.');
 }
 // Exemplo de JS para futura interação
 // Adicione funcionalidades JS conforme necessário
